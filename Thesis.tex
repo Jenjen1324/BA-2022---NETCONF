@@ -1,0 +1,92 @@
+%%****************************************************************************
+%** Copyright 2002, 2003 by Lukas Ruf, <ruf@topsy.net>
+%** Information is provided under the terms of the
+%** GNU Free Documentation License <http://www.gnu.org/copyleft/fdl.html>
+%** Fairness: Cite the source of information, visit <http://www.topsy.net>
+%****************************************************************************
+%** Last Modification: 2005-07-11 1600
+%** 2005-07-11	Bernhard Tellenbach
+%**							Switched default document class to: book
+%**							Added \include{appendix.tex}
+%****************************************************************************
+
+%\documentclass[10pt,final,a4paper,twoside]{book}
+%\documentclass[10pt,draft,a4paper,oneside]{report}
+\documentclass[headings=optiontohead,10pt,final,a4paper,oneside]{scrreprt}
+%\documentclass[10pt,draft,a4paper,oneside]{article}
+
+%**Latex Master Document*********
+
+%** preamble.tex: here all the document-wide settings
+%                 are defined
+\input{Settings/preamble}
+
+%********************************
+
+%** begin the document environment
+\begin{document}
+
+\frenchspacing
+\sloppy
+
+%** Titel.tex: Title page to be printed first
+\input{Titel}
+
+%** environments.tex: Predefined Environments
+\include{environments}
+%**Documentation****************
+
+%** Zusammenfassung.tex
+\include{Chapters/Abstract}
+
+%** Vorwort.tex
+\include{Chapters/Foreword}
+
+%** Table of Contents
+\tableofcontents
+
+%** Einleitung.tex: 
+% - Nennt bestehende Arbeiten/Literatur zum Thema
+% - Stand der Technik: Bisherige Lösungen des Problems und deren Grenzen
+% - (Nennt kurz den Industriepartner und/oder weitere Kooperationspartner und dessen/deren Interesse am Thema Fragestellung)
+% - Formuliert das Ziel der Arbeit
+% - Verweist auf die offizielle Aufgabenstellung des/der Dozierenden im Anhang
+% - (Pflichtenheft, Spezifikation)
+% - Übersicht über die Arbeit: stellt die folgenden Teile der Arbeit kurz vor
+% - (Angaben zum Zielpublikum: nennt das für die Arbeit vorausgesetzte Wissen)
+% - (Terminologie: Definiert die in der Arbeit verwendeten Begriffe)
+\include{Chapters/Introduction}
+
+%** TheoretischeGrundlagen.tex:
+\include{Chapters/Theory}
+
+%** Vorgehen.tex:
+% - Beschreibt die Grundüberlegungen der realisierten Lösung (Konstruktion/Entwurf) und die Realisierung als Simulation, als Prototyp oder als Software-Komponente etc.
+% - (Definiert Messgrössen, beschreibt Mess- oder Versuchsaufbau, beschreibt und dokumentiert Durchführung der Messungen/Versuche)
+% - (Experimente)
+% - (Lösungsweg)
+% - (Modell)
+% - (Eingesetzte Software)
+% - (Tests und Validierung)
+\include{Chapters/Methods}
+
+%** Resultate.tex:
+% - Zusammenfassung der Resultate
+\include{Chapters/Results}
+
+%** DiskussionAusblick.tex:
+% - Bespricht die erzielten Ergebnisse bezüglich ihrer Erwartbarkeit, Aussagekraft und Relevanz
+% - Interpretation und Validierung der Resultate
+% - Rückblick auf Aufgabenstellung, erreicht bzw. nicht erreicht
+% - Legt dar, wie an die Resultate (konkret vom Industriepartner oder weiteren Forschungsarbeiten; allgemein) angeschlossen werden kann; legt dar, welche Chancen die Resultate bieten.
+\include{Chapters/Discussion}
+
+%** Verzeichnisse.tex:
+\include{Chapters/References}
+
+%** Anhang.tex:
+
+\include{Chapters/Appendix}
+
+%** end the document environment
+\end{document}
