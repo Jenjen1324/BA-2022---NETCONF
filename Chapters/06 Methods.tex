@@ -1,0 +1,19 @@
+\chapter{\label{methods}Methods}
+\thispagestyle{fancy}
+
+
+\section{Application structure}
+
+To bridge the gap between the inventory management provided by NetBox and communicating with the actual hardware,
+the solution is divided into layers.
+In order to facilitate authentication and authorization there is the ,,Credential Access Manager'' which communicates
+with an external credential store. The access manager provides a user interface to enter and manage credentials, as well
+as restricting who has access to these credentials by integrating into the NetBox permission system.
+The ,,Device Context Provider'' enables a user to define what information for a specific device shall be pulled.
+Using the existing GraphQL API provided by NetBox, the user can easily identify what information is available and how it is
+accessed. After the context data is defined it will subsequently be used in the ,,Configuration Template Editor''
+where the user writes a template using the previously defined context data. This template can then be applied to
+a class of devices utilizing constraints such as tags or locations.
+Lastly, the ,,Configuration Transport'' module pulls the configuration template and the credentials for a specific device
+and pushes it to the actual device.
+
