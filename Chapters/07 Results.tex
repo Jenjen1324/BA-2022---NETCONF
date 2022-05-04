@@ -5,7 +5,37 @@
 
 \subsection{Init7 (Schweiz) AG}
 
+Init7 is a \acrshort{ISP} since the year 2000. While it started with providing \acrshort{ADSL} service, they launched their fiber internet service
+,,Fiber7'' in 2014 with competitive prices. Since then, the company has been expanding their geographical availability by
+equipping an increasing amount of PoPs with their own infrastructure. The increase in infrastructure means that there is
+an ever growing number of devices that have to be configured and managed. While they do employ automations, most of them
+are implemented in the provisioning process. This would be mostly sufficient if they would only provide basic internet access,
+as usually no configuration is needed to take a new customer online since the physical patching of the connection is done through
+the owner of the fiber (usually power stations or Swisscom).
+
+On the other hand, configuration is needed for a lot of \acrfull{B2B} products, as for example the following services:
+\begin{itemize}
+    \item Point-to-Point L2 connection: Enables the customer to create a layer 2 network across multiple sites.
+      This can for example be implemented using a protocol like \acrshort{MPLS}.
+    \item IP Transit: Enables the customer to directly connect to our core through \acrshort{BGP}.
+    \item Business Internet Service: Very similar to a private service, but with the crucial difference that the customer
+       uses \acrfull{CPE} which is managed and monitored by Init7.
+\end{itemize}
+
+In general, the business products also require Init7 to actively monitor status and quality. To be able to collect this data
+both the access switch within the \acrfull{PoP} and the \acrshort{CPE} at the customer need to be configured accordingly.
+
+While this thesis aims to provide a general solution for configuration, in order to keep the scope managable, the focus
+and evaluation is limited to the access layer of the Init7 infrastructure.
+To get a basic understanding of the Init7 infrastructure, a very simplified diagram is shown in [fig]. The \acrfull{IGP} used is
+\acrshort{OSPF} and is split in two main parts. The core network ecompasses a cross-connected mesh of routers which are spread all
+over the world. All interconnects and peerings to ISPs, customers and internet exchanges take place there. 
+
+TODO: Explain Access Layer
+
 \subsection{Rack Black Association}
+
+
 
 \section{Requirements Analysis}
 
@@ -25,6 +55,8 @@ Lastly, the ,,Configuration Transport'' module pulls the configuration template 
 and pushes it to the actual device.
 
 \subsection{Credential Access Manager}
+
+
 
 \subsection{Device Context Provider}
 
