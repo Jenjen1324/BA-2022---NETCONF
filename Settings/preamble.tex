@@ -126,6 +126,16 @@
 \newcommand\CHECK{\myMargin{CHECK}}
 \newcommand\NEW{\myMargin{NEW}}
 
+\usepackage{alltt}
+
+\newcommand{\cn}[1]{%
+  \fcolorbox{red}{yellow}{%
+    \parbox{\textwidth}{%
+      #1
+    }%
+  }%
+}%
+
 \usepackage[acronym,numberedsection=autolabel,section=section,automake]{glossaries}
 
 \makeglossaries
