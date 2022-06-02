@@ -2,42 +2,106 @@
 \thispagestyle{fancy}
 
 
-\seciton{Network Management Systems}
-
-% Mostly propieritary solutions
-% - Cisco
-% - Juniper
-% - etc.
-
-\section{Secure credential storage}
-
-
-
-\section{Configuration Methods}
-
-% - Configuration Transports
-%  - NetConf
-%  - RestConf
-%  - CLI
-%  - SNMP
-%  - HTTP APIs
-
-\section{User Interface for Engineers}
-
-\section{Inventory Management}
-
-% - Infrastructure Inventory Management
-%  - NetBox
-
-\section{Case Study}
-
-\subsection{Init7 (Schweiz) AG}
-
-
 \section{OSS/BSS}
 
 \cn{
 Differentiate OSS and BSS. Where NetBox will be the core OSS and everything
 connecting to it is the BSS.
 }
+
+\cn{includes inventory management}
+
+\section{Secure credential storage}
+
+\cn{Need for credentials in configuration}
+
+\cn{Refer to security theory, least privileges, etc.}
+
+
+\section{Network Management Systems}
+
+% Mostly propieritary solutions
+% - Cisco
+% - Juniper
+% - etc.
+
+\section{Configuration Methods}
+
+\subsection{CLI Configuration}
+
+Probably the most common method of configuring devices is through its \acrlong{CLI}. 
+Most modern networking hardware supports access to the \acrshort{CLI} through SSH,
+but in cases where networking may not be available, the same interface is often also
+presented in the form of a serial connection, through a dedicated port on the device.
+
+As there is no standardization for the \acrshort{CLI} across vendors, it makes it a
+difficult target for automation in a vendor agnostic space. On the other hand it
+is also usually the most complete interface in terms of features for the device
+you are configuring, as most vendors recognise it as the primary interface for configuration\cite{noauthor_configuration_nodate}.
+
+There are projects such as NAPALM (Network Automation and Programmability Abstraction Layer with Multivendor support)\cite{noauthor_napalm_nodate}
+which aim to solve the problem of providing a similar interface to multiple vendors,
+but the functionality of such projects is severely limited in terms of interfaces provided
+for configuration across vendors.
+
+Since the \acrshort{CLI} is a text based interface, it makes it hard to validate the configuration
+before deployment. Especially since the order of configuration statements often matters
+(e.g. you cannot assign a VLAN before creating it), it makes it hard to stitch together
+multiple templates without having an engine understand the whole configuration before sending
+it off to the device.
+
+\subsection{SNMP}
+
+The Simple Network Management Protocol (SNMP)\cite{fedor_simple_1990} is a protocol which was originally
+designed in the 1980s by a group of collaborators which sought to create a protocol which would
+allow large scale-deployment of the internet.
+As the name implies, it is quite a simple protocol based on a few key operations:
+GetRequest, SetRequest, GetNextRequest, GetBulkRequest and some more.
+
+In practice it works with vendor supplied ,,management information base'' (MIB) files, which identify a collection of
+of object identifiers (OIDs) with a name, description and data-type. 
+Along the vendor specific MIBs, there are also some standard collections,
+which try to define generic information which can be queried.
+So for example the OID ,,1.3.6.1.2.1.1.1'' corresponds to ,,iso.org.dod.internet.mgmt.mib.system.sysDescr''
+which represents a textual description of the device which is queried.
+
+SNMP is still largely used today for monitoring, as it is a (as the name implies) simple and light protocol
+which usually doesn't generate a lot of overhead. There are some shortcomings though when it comes to
+structured configuration data, especially with write/set operations. Altough data types can now be verified
+using the MIB files, a configuration section as a whole still cannot be verified before sending it to a device,
+as dependencies between configuration nodes cannot be specified in the MIB format. Also handling data
+in lists is complex, as when one wants to edit a specific node, the whole list first has to be searched
+with get requests in order to identify the correct offset which is to be modified.
+
+\subsection{NETCONF}
+
+\cn{Briefly explain the start of the NETCONF protocol}
+\cn{Transition into NETCONF/YANG}
+
+\subsection{NETCONF/YANG}
+
+\cn{Explain yang modeling and why it helps}
+\cn{refer to useful projects: sysrepo, netopeer2, yangexplorer, yanglib, pyang, ncclient}
+
+\cn{mention RESTCONF}
+
+\subsection{HTTP APIs}
+
+\cn{Completely vendor specific}
+\cn{Often not available at all}
+
+\section{User Interface for Engineers}
+
+\cn{Existing user interfaces}
+
+\cn{Gathering information from documentation}
+
+\cn{Gathering information from Yang Models}
+
+\section{Case Study - Init7 (Schweiz) AG}
+
+\cn{Current state: Not a lot of automation}
+
+\cn{If configuration from OSS - forces correct documentation -> documentation implies configuration}
+
 
