@@ -75,13 +75,62 @@ with get requests in order to identify the correct offset which is to be modifie
 
 \subsection{NETCONF}
 
-\cn{Briefly explain the start of the NETCONF protocol}
-\cn{Transition into NETCONF/YANG}
+NETCONF is a protocol developed and stadardized in 2006 \ci{cite} by \acrshort{IETF}.
+While it is comparable to SNMP, there are key differences:
+It is based on \acrfull{RPC}s encoded with XML.
+This allows the protocol to send complex but structured data, providing broad flexibility
+when interacting with configuration data. 
+This becomes apparrent when for example configuring an interface, where the actual configuration
+can be represented with nested data structures.
+Notable is also, that the ,,reference'' configuration method, i.e. the CLI, also often has some form
+of nesting in its configuration, which can therefore be represented more clearly with NETCONF.
+
+The \acrshort{RPC}s are comprised of some key operations: ,,<get-config>'' which allows one to read
+the configuration of a device, ,,<edit-config>'' which allows manipulation of the config, ,,<get>''
+which allows reading of operational data for monitoring or statistics, and others which are not
+relevant for this thesis. 
+The important detail to these operations, is that all of them allow to specify what exactly shall
+be retreived or written within a single \acrshort{RPC}. Combined with the fact that a structured
+markup language is used (XML), it becomes trivial to combine and manipulate fragments of configuration.
+
+While there are tools to validate XML against a given schema without sending the configuration to the device,
+notably \acrfull{XSD}, it is still somewhat limited in functionality, 
+which is why NETCONF got extended with the YANG language explained below.
 
 \subsection{NETCONF/YANG}
 
-\cn{Explain yang modeling and why it helps}
-\cn{refer to useful projects: sysrepo, netopeer2, yangexplorer, yanglib, pyang, ncclient}
+YANG is not a configuration protocol or format in itself.
+It is described as ,,a data modeling language used to model configuration and
+state data manipulated by the Network Configuration Protocol (NETCONF)''\ci{cite rfc6020}.
+It aims to solve some limitations of the XML validation language XSD and further make it
+easier to define the data models for engineers.
+
+\cn{Perhaps compare a snipped of XSD and YANG}
+
+Similar to SNMP, there are some ,,standard'' models defined by \acrshort{IETF}, IANA, IEEE
+and a collective called OpenConfig. But even if a device might not support those standard
+models completely, there are mechanism defined in NETCONF/YANG which allow an engineer
+to discover which models a device supports and also download these models directly from the
+device itself. This brings a huge benefit in terms of discoverability in what is possible
+to configure on a given device, contrary to SNMP, where the engineer is reliant on
+the vendor to supply the correct MIB files.
+
+While not every vendor supports NETCONF, the number in the enterprise space is large by
+having support from Juniper, Cisco, Extreme Networks, Nokia, Ruckus and more.
+With this widespread support, there is also diverse tooling available to aide in development
+with NETCONF and YANG:
+
+\paragraph{CESNET libraries and tools} CESNET, an association of universities of the Czech Republic,
+offers a suite of libraries to develop systems with NETCONF and YANG.
+The Sysrepo\ci{cite} library, allows application developers to add YANG based configuration models to their
+applications, which can then be combined with the Netopeer2\ci{cite} project to automatically integrate NETCONF
+support. While not directly useful for writing a NETCONF client, their libyang\ci{cite} library offers
+tooling for interpreting and validating YANG models. This library also offers functionality when
+working with instance data (e.g. a configuration snippet) in order to validate or manipulate this data.
+
+\paragraph{Cisco YANG Suite} \ci{discoverability visibility etc.}
+
+\paragraph{ncclient} \ci{python stuff}
 
 \cn{mention RESTCONF}
 
