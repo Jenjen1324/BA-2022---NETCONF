@@ -4,21 +4,38 @@
 
 \section{OSS/BSS}
 
-\cn{
-Differentiate OSS and BSS. Where NetBox will be the core OSS and everything
-connecting to it is the BSS.
-}
+In the telecommunications business, there is a differentiation between \acrlong{OSS} and \acrlong{BSS}.
+The objective of the \acrshort{OSS}, as the name implies, is to support operations processes.
+This includes for example provisioning, configuration and monitoring. Within the business,
+the core parts consist of delivery, fulfillment, assurance and customer support.
+Within the proof of concept, NetBox is part of the OSS, aiding in delivery and fullfillment.
 
-\cn{includes inventory management}
+As \acrshort{BSS}s mainly concerns itself mostly about products, revenue and orders,
+they are not a subject of the thesis. But as both systems are needed within a business,
+when developing an \acrshort{OSS}, one has to keep in mind that it should be able to
+integrate into the \acrshort{BSS}.
 
 \section{Secure credential storage}
 
-\cn{Need for credentials in configuration}
+As misconfiguration or unauthorized access can be used to cause a denial of service or
+even damage to a customer or business, security plays a key role in a network infrastructure.
+Therefore, most network devices support some form of authentication and also granular authorization
+mechanisms. In order to have a system interact with these devices, that system must therefore
+be able to authorize itself to these devices.
 
-\cn{Refer to security theory, least privileges, etc.}
+In all following configuration methods, the authentication is basedon  some sort of secret,
+be it a private key for SSH or username and password. Since the configuration should be
+able to happen with or without user interaction, these secrets need to be stored in some way.
+Considerations need to be made on how such secrets are stored, because if an unauthorized party
+is able to gain access to these secrets, they potentially gain access to the whole network infrastructure.
+
+One may want to solve this problem oneself, or choose a pre-made solution, which is further explored
+in the thesis.
 
 
-\section{Network Management Systems}
+% Write if time is avail.
+
+%\section{Network Management Systems}
 
 % Mostly propieritary solutions
 % - Cisco
@@ -128,24 +145,37 @@ support. While not directly useful for writing a NETCONF client, their libyang\c
 tooling for interpreting and validating YANG models. This library also offers functionality when
 working with instance data (e.g. a configuration snippet) in order to validate or manipulate this data.
 
-\paragraph{Cisco YANG Suite} \ci{discoverability visibility etc.}
+\paragraph{Cisco YANG Suite} In order to help engineers develop solutions
+utilizing NETCONF/YANG, Cisco provides a web-based tool which can be run
+on a local machine. This tool is able to connect to devices with the
+NETCONF protocol, discover the capabilities of the device, download YANG
+models from the device and visually display them to the engineer.
+Additionally, an engineer can construct arbitrary NETCONF RPCs and
+execute them on the device. This tool was heavily utilized for the
+proof of concept in this Thesis.
 
-\paragraph{ncclient} \ci{python stuff}
+\paragraph{ncclient and pyang} Community made python libraries and tools
+make it possibily to quickly prototype and develop solutions using NETCONF.
+,,ncclient'' is a python library providing an easy to use API to connect
+to devices with NETCONF. This is also the library used to implement the
+proof of concept. ,,pyang'' is a python library used to parse and
+validate YANG model files.  
 
-\cn{mention RESTCONF}
+More recently (in terms of standards development) a protocol called RESTCONF
+has been developed. It also uses YANG and is very similar to NETCONF but
+instead of strictly using XML RPC it utilizes either XML or JSON transported
+via HTTP. Since support isn't widespread yet and it is functionally identical
+to NETCONF, RESTCONF is not further explored in this thesis.
 
 \subsection{HTTP APIs}
 
-\cn{Completely vendor specific}
-\cn{Often not available at all}
+Some vendors provide a propiritary HTTP API in order to configure devices.
+Notably, MikroTik has an HTTP API which is equivalent to its CLI interface,
+which may make it simpler to configure programmatically in some cases but
+does not provide many benefits in terms of functionality.
 
-\section{User Interface for Engineers}
-
-\cn{Existing user interfaces}
-
-\cn{Gathering information from documentation}
-
-\cn{Gathering information from Yang Models}
+Since there is no defined standard of how such an HTTP API should look,
+it makes it no more beneficial than the CLI. 
 
 \section{Case Study - Init7 (Schweiz) AG}
 
