@@ -1,0 +1,5 @@
+{"rule":"MORFOLOGIK_RULE_EN_US","sentence":"^\\QThere are projects such as NAPALM (Network Automation and Programmability Abstraction Layer with Multivendor support)\\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q which aim to solve the problem of providing a similar interface to multiple vendors, but the functionality of such projects is severely limited in terms of interfaces provided for configuration across vendors.\\E$"}
+{"rule":"EN_SIMPLE_REPLACE","sentence":"^\\QCase Study - Init7 (Schweiz) AG.\\E$"}
+{"rule":"CD_NN","sentence":"^\\QOn the other hand, configuration is needed for a lot of B2B products, as for example the following services: Point-to-Point L2 connection: Enables the customer to create a layer 2 network across multiple sites.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QBut as both systems are needed within a business, when developing an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q, one has to keep in mind that it should be able to integrate into the \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q.\\E$"}
+{"rule":"EN_A_VS_AN","sentence":"^\\QInit7 is an \\E(?:Dummy|Ina|Jimmy-)[0-9]+\\Q since the year 2000.\\E$"}

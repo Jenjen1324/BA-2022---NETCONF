@@ -6,28 +6,28 @@
 % Describe current state of technology and solutions
 
 Networking hardware makes out a huge part in our internet infrastructure. 
-There are an increasing amount of hardware vendors varying in range of functionality. 
+There is an increasing amount of hardware vendors varying in range of functionality. 
 \glspl{ISP} are obvious customers of such hardware, but businesses of all sizes may have needs for all kinds of devices. 
 This starts to pose the question, of how these devices shall be managed, especially when the need for scaling up arises. 
 Many vendors supply configuration management solutions, also called \glspl{NMS} along their hardware offering, 
-such as Cisco's ,,Cisco DNA Center``\cite{noauthor_cisco_nodate} or Juniper's ,,Junos Space``\cite{noauthor_junos_nodate} 
+such as Cisco's ``Cisco DNA Center\cite{noauthor_cisco_nodate}'' or Juniper's ``Junos Space\cite{noauthor_junos_nodate}'' 
 which might be the perfect fit in an environment wherein all hardware is obtained from the same vendor.
 On the other hand, in mixed vendor environments, 
 problems arise with these solutions as they primarily support their own hardware.
 
-Since there's no ,,one size fits all'' solution, one might want to come up with a custom solution.
+Since there's no ``one size fits all'' solution, one might want to come up with a custom solution.
 In order to create a custom solution, one must know how devices are configured by \acrshort{NMS}s 
-(or humans if that is automatable). There are numerous so called network configuration protocols, 
+(or humans if that is automatable). There are numerous so-called network configuration protocols, 
 such as \acrshort{SNMP}\cite{fedor_simple_1990}, CLI (e.g. via SSH or serial), NETCONF\cite{enns_network_2011} and others,
 which can be used to remotely configure devices.
 
 In order to configure devices, one must also know which devices exist within the infrastructure.
 So called \acrfull{IRM} software is used to track the devices along with
 information related to how they are connected and configured. 
-While the above mentioned \acrshort{NMS}'s usually provide such functionality, there are also
+While the above-mentioned \acrshort{NMS}'s usually provide such functionality, there are also
 standalone solutions such as NetBox, which tracks everything from hardware to IP addresses.
 Using the \acrshort{IRM} as the source of information, one would then be able to use a configuration protocol
-to confgigure the devices according to ones needs.
+to configure the devices according to one's needs.
 
 \section{\label{introduction-goal}Goal / Aim}
 
@@ -44,7 +44,7 @@ As it is usually necessary to authenticate oneself in order to apply configurati
 the issue of credential management and storage has to be solved.
 
 \cn{Target open source space}
-\cn{be vendor agnostic}
+\cn{be vendor-agnostic}
 \cn{compare transport protocols}
 \cn{analyze compatibility}
 

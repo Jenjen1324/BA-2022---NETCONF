@@ -4,29 +4,112 @@
 
 To gain knowledge and an understanding of the subject, literature was researched and
 the Init7 network engineering team was questioned. As only a
-prototype was created to the feasability, a waterfall-like structure was used for
+prototype was created to the feasibility, a waterfall-like structure was used for
 the planning of the implementation.
 
 \section{Literature Research Method}
 
 While documentation regarding standardized network protocols is fairly easy to find,
-research specific to configuration managament is rather limited, because solutions
+open research specific to configuration management is rather limited, because solutions
 mostly exist in an enterprise context.
 
+Research literature was still found through search platforms such as Google Scholar and
+ZHAW Swisscovery. Focused was on specific search terms:
 
+\begin{itemize}
+  \item NETCONF
+  \item YANG
+  \item Network Management System
+  \item Network Automation
+  \item Network Configuration Protocol
+\end{itemize}
 
-\subsection{}
+The found articles were filtered for relevance and the rest was thoroughly studied.
 
+Although some useful resources were identified, most information was found through
+blog articles, vendor documentation, open source projects and testing methods on real
+devices.
 
+\cn{Fragmented open source solutions}
 
+\subsection{Init7 Network Engineering Team}
 
-- Lots of papers on protocols
-- Difficulty in finding concrete cases
-- Lots of stuff is propiritary
-  - Open Source solutions are very fragemented
-  - Makes it hard to find examples for working solutions
+As the industry partner for this thesis, Init7 provided assistance and insight into
+networking infrastructure through their network engineers.
+The engineering team provided information about the general infrastructure within Init7, 
+how the current business processes are implemented, in-depth information about
+networking, as well as general support when questions arose.
 
-\section{Software Engineering Method}
+\section{\label{method-soft}Software Engineering Method}
 
-\section{Evalution Method}
+The decision to make a plugin for NetBox was made during the definition
+of the thesis. This decision was based on that NetBox was already used
+within Init7, is open source and provides a stable plugin framework.
+As the implementation is a prototype to prove feasibility of the
+configuration method, no iterative development was needed.
+In order to have a structured timeline and implementation plan,
+a waterfall like software planning method was chosen.
+This means, the development process was split into the following phases:
 
+\begin{enumerate}
+  \item Requirements analysis including a ``definition of done''. This is further detailed
+        in the evaluation method.
+  \item Abstract design of the architecture of the plugin
+  \item Implement the planned design
+  \item Test the implementation with the planned use cases from the requirements stage
+\end{enumerate}
+
+\section{Evaluation Method}
+
+In order to define a clear goal, criteria were defined in order to evaluate
+the finished product.
+A primary focus were the before mentioned security considerations,
+where the criteria need to be carefully chosen in order to provide
+some guarantees in terms of safety. The second factor is to prove
+that the provided functionality provides a benefit of some form.
+This is achieved by implementing two real-world processes by Init7
+utilizing the tool. Because the goal is to stay as generic as possible,
+both in terms of vendor support and usefulness for businesses and individuals
+other than Init7, these use cases were presented by the engineering team
+after the implementation was complete. This is to ensure, that the implementation
+is not biased for Init7 use cases and to show that there is a use for
+the general networking community.
+
+\subsection{Security Criteria}
+
+In order to argue security of a software system, threat actors need to be
+defined which the system should be protected against. The threat actors
+were identified with the help of the Init7 network engineering and operations
+teams. Since they are responsible for the security of their systems and processes,
+they are able to provide this information through their education and experience.
+The following threat actors were identified.
+
+\paragraph{External actors} These are defined as individuals or organizations
+which are either not related to Init7 or are customers of Init7. As such,
+these actors must have no access to either NetBox, any credentials or
+the network infrastructure.
+
+\paragraph{Unauthorized employees} Only a subset of network engineers need
+access specific infrastructure and functionality. The system must be
+able to differentiate between these sets of employees and enforce access
+restrictions.
+
+\paragraph{Authorized employees} While this group has the most access in
+the system, considerations need to be made for potential mistakes.
+This is usually implemented through validation and safeguards to eliminate
+or reduce the potential impact for mistakes.
+
+Using these threat actors, a list of security criteria was created,
+listed and evaluated in \ref{eval-security}.
+
+\subsection{Use case evaluation}
+
+After the implementation, the network engineering team of Init7 presented
+two scenarios which were to be implemented with the produced solution.
+The network engineering team was then instructed on the general
+functionality of the plugin and the use case was implemented in
+a collaborative manner.
+
+The collaborative process is used to gain an understanding of the perspective
+of the network engineers in order to identify any potential issues
+ranging from software to usability problems.

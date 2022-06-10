@@ -1,76 +1,144 @@
 \chapter{\label{results}Results}
 \thispagestyle{fancy}
 
-\section{Current State}
-
-\subsection{Init7 (Schweiz) AG}
-
-Init7 is an \acrshort{ISP} since the year 2000. While it started with providing \acrshort{ADSL} service, they launched their fiber internet service
-,,Fiber7'' in 2014 with competitive prices. Since then, the company has been expanding their geographical availability by
-equipping an increasing amount of PoPs with their own infrastructure. The increase in infrastructure means that there is
-an ever growing number of devices that have to be configured and managed. While they do employ automations, most of them
-are implemented in the provisioning process. This would be mostly sufficient if they would only provide basic internet access,
-as usually no configuration is needed to take a new customer online since the physical patching of the connection is done through
-the owner of the fiber (usually power stations or Swisscom).
-
-On the other hand, configuration is needed for a lot of \acrfull{B2B} products, as for example the following services:
-\begin{itemize}
-    \item Point-to-Point L2 connection: Enables the customer to create a layer 2 network across multiple sites.
-      This can for example be implemented using a protocol like \acrshort{MPLS}.
-    \item IP Transit: Enables the customer to directly connect to our core through \acrshort{BGP}.
-    \item Business Internet Service: Very similar to a private service, but with the crucial difference that the customer
-       uses \acrfull{CPE} which is managed and monitored by Init7.
-\end{itemize}
-
-In general, the business products also require Init7 to actively monitor status and quality. To be able to collect this data
-both the access switch within the \acrfull{PoP} and the \acrshort{CPE} at the customer need to be configured accordingly.
-
-While this thesis aims to provide a general solution for configuration, in order to keep the scope managable, the focus
-and evaluation is limited to the access layer of the Init7 infrastructure.
-To get a basic understanding of the Init7 infrastructure, a very simplified diagram is shown in [fig]. The \acrfull{IGP} used is
-\acrshort{OSPF} and is split in two main parts. The core network ecompasses a cross-connected mesh of routers which are spread all
-over the world. All interconnects and peerings to ISPs, customers and internet exchanges take place there. 
-
-\begin{figure}[h]
-  \centering
-  \includegraphics[width=0.7\textwidth]{Init7-Infrastructure}
-  \caption{Init7 Topology}
-  \label{fig:topology}
-\end{figure}
-
-TODO: Explain Access Layer
-
-
 \section{Requirements Analysis}
+
+The first step of the development process was to find out and define
+how the solution should work. In collaboration with the Init7 network
+engineering team, the core use cases were defined. As this was only
+a proof of concept, the use cases were only described in a brief and
+concise format. Furthermore, a consensus was formed how an engineer
+should be able to operate with the plugin in general.
+
+The following use cases were defined based on the design idea that
+the engineer is able to write configuration templates which utilize data
+available in NetBox, which subsequently can be deployed to a device.
+
+\begin{enumerate}[label=U.\arabic*]
+  \item{\label{uc-agg}} \textbf{Data Aggregation} 
+  The engineer is able to easily configure and discover the available
+  context information for authoring a template.
+  \item{\label{uc-tmpl}} \textbf{Template Authoring}
+  A view with an editor exists to author configuration templates.
+  This view also provides a preview of the context data and this data
+  can be used to preview the rendered template.
+  \item{\label{uc-appl}} \textbf{Configuration Deployment}
+  The engineer is able to apply a previously configured template
+  to a network device.
+  \item{\label{uc-cred}} \textbf{Credential Management}
+  An authorized engineer is able to configure credentials which are used
+  in the configuration deployment. The usage access to these credentials must
+  be restrictable to specific users or groups. The ability to modify these
+  credentials must also be restrictable to specific users or groups.
+\end{enumerate}
+
+In addition to the use cases, a decision has to be made on which
+configuration method is used. In order to do this, the following compatibility
+matrix was created:
+
+\begin{center}
+\begin{tabular}{l|c|c|c|c}
+  Vendor & CLI & SNMP & NETCONF/YANG & HTTP API \\
+  \hline\hline
+  Cisco & Yes & Yes & Yes & No \\
+  \hline
+  MikroTik & Yes & No\textsuperscript{1} & No & Yes \\
+  \hline
+  Juniper & Yes & Yes & Yes & Yes \\
+  \hline
+  Extreme Networks & Yes & Yes & Yes & Yes \\
+  \hline
+  FS & Yes & No\textsuperscript{1} & Yes & Yes \\
+  \hline
+  Nokia & Yes & N/A & Yes & N/A \\
+  \hline
+  Ubiquity & Yes & No\textsuperscript{1} & No & Yes \\
+\end{tabular}
+\end{center}
+
+\textsuperscript{1} SNMP is supported, but only supports read
+operations, which makes it unsuitable for configuration deployment.
+
+The above list of vendors include both vendors which are used within Init7
+and other vendors which often appear in enterprise and ``power user''
+environments. (Basic consumer hardware was disregarded since they usually
+do not provide any standardized way to configure them.)
+
+\paragraph{Configuration method decision} The HTTP APIs were excluded first
+from the selection, since after some research, it became clear that they
+differ wildly between vendors which makes it near impossible to write
+a generic solution for. SNMP was excluded for both its age and lack
+of write support in many vendor implementations. In the end, NETCONF/YANG was
+chosen over the CLI because of the benefit of the model driven configuration
+outlined in \ref{theory:conf:yang}.
 
 \section{Application structure / Architecture}
 
 To bridge the gap between the inventory management provided by NetBox and communicating with the actual hardware,
 the solution is divided into layers.
-In order to facilitate authentication and authorization there is the ,,Credential Access Manager'' which communicates
+In order to facilitate authentication and authorization there is the ``Credential Access Manager'' which communicates
 with an external credential store. The access manager provides a user interface to enter and manage credentials, as well
 as restricting who has access to these credentials by integrating into the NetBox permission system.
-The ,,Device Context Provider'' enables a user to define what information for a specific device shall be pulled.
+The ``Device Context Provider'' enables a user to define what information for a specific device shall be pulled.
 Using the existing GraphQL API provided by NetBox, the user can easily identify what information is available and how it is
-accessed. After the context data is defined it will subsequently be used in the ,,Configuration Template Editor''
+accessed. After the context data is defined it will subsequently be used in the ``Configuration Template Editor''
 where the user writes a template using the previously defined context data. This template can then be applied to
 a class of devices utilizing constraints such as tags or locations.
-Lastly, the ,,Configuration Transport'' module pulls the configuration template and the credentials for a specific device
+Lastly, the ``Configuration Transport'' module pulls the configuration template and the credentials for a specific device
 and pushes it to the actual device.
+
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{Software-Arch}
+  \caption{Software Architecture Concept}
+  \label{fig:soft-arch}
+\end{figure}
+
+
 
 \subsection{Credential Access Manager}
 
-
+In order to offload parts of the potential security issues with storing
+credentials, an external credential manager is used.
+In this case, HashiCorp Vault is used, as it is relatively easy to
+set up and became one of the de facto solutions in multiservice
+environments. To integrate Vault into the NetBox plugin, the client
+library \icode{hvac} is used. A small abstraction layer is built
+on top of the library, to make it easy for the rest of the plugin
+to store and retrieve secrets.
 
 \subsection{Device Context Provider}
+
+Rendering templates in general usually requires some sort of context data
+(i.e. a template for a marketing mail might require the customers name.)
+NetBox already has a functionality called ``Export Templates'' which
+allow a user to write templates to export lists of data with a custom
+output format. What makes these ``Export Templates'' hard to use is that
+they utilize the python objects mapped from the database as context,
+which makes it somewhat necessary to know the internals of NetBox to
+use them effectively.
+
+Though what NetBox also provides, is a GraphQL API. GraphQL allows
+the API consumer to specify exactly what data one is interested in,
+in addition to requiring a complete specification for the API.
+Using this specification, one can use a client like ``GraphiQL'',
+which provides the user with autocompletion and documentation
+access. As this client is built-in to NetBox, it provides an
+intuitive user interface for specifying context data.
+
+The Device Context Provider is therefore implemented by accepting
+GraphQL queries in its configuration, which the user can author
+with ``GraphiQL''.
 
 \subsection{Configuration Template Editor}
 
 \subsection{Configuration Transport}
 
+\section{\label{eval-security}Security Evaluation}
 
 
-\section{Scenarios}
+\section{Scenario Evaluation}
 
 The following sections describe three chosen real-world scenarios within Init7.
 More specifically, they are services which can be ordered by customers and also
@@ -85,7 +153,7 @@ Fiber7 is Init7's flag-ship product in the private consumer space,
 providing consumers a \acrshort{P2P} fiber-optical connection directly into
 Init7 infrastructure. Since this is the most commonly sold product by Init7
 it is already one of the most streamlined processes throughout the department
-with work being largerly automated.
+with work being largely automated.
 
 \begin{figure}[h]
   \centering
@@ -110,18 +178,18 @@ will be connected to. The engineer will then go through the following process:
 \end{enumerate}
 
 While the process might have seven steps, usually not all of that work is required.
-When choosing the interface for the new service, it is verifed through the \acrshort{OSS}
+When choosing the interface for the new service, it is verified through the \acrshort{OSS}
 that the port has no other active use.
 Interfaces have the Fiber7 private customer profile configured by default
 if it was previously unused or was previously used for the same service,
 rendering step 3 usually unnecessary.
 Most commonly, customers do not request static IP addresses or prefixes as
-they are an additional cost to the subscription and are only used by ,,power-users'',
+they are an additional cost to the subscription and are only used by ``power-users'',
 rendering steps 4 and 5 unnecessary.
 
 The key observation that can be made, is that there are multiple manual steps
 which can be prone to mistakes, yet they are always performed the same way. This makes
-them good candidates for automation. Thus the goal is to restructure the process
+them good candidates for automation. Thus, the goal is to restructure the process
 to the following:
 
 \begin{enumerate}
