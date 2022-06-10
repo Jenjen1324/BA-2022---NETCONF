@@ -93,7 +93,7 @@ with get requests in order to identify the correct offset which is to be modifie
 
 \subsection{NETCONF}
 
-NETCONF is a protocol developed and standardized in 2006 \ci{cite} by \acrshort{IETF}.
+NETCONF is a protocol developed and standardized in 2006 by \acrshort{IETF}.
 While it is comparable to SNMP, there are key differences:
 It is based on \acrfull{RPC}s encoded with XML.
 This allows the protocol to send complex but structured data, providing broad flexibility
@@ -119,11 +119,9 @@ which is why NETCONF got extended with the YANG language explained below.
 
 YANG is not a configuration protocol or format in itself.
 It is described as ``a data modeling language used to model configuration and
-state data manipulated by the Network Configuration Protocol (NETCONF)'' \ci{cite rfc6020}.
+state data manipulated by the Network Configuration Protocol (NETCONF)''.
 It aims to solve some limitations of the XML validation language XSD and further make it
 easier to define the data models for engineers.
-
-\cn{Perhaps compare a snipped of XSD and YANG}
 
 Similar to SNMP, there are some ``standard'' models defined by \acrshort{IETF}, IANA, IEEE
 and a collective called OpenConfig. But even if a device might not support those standard
@@ -140,9 +138,9 @@ with NETCONF and YANG:
 
 \paragraph{CESNET libraries and tools} CESNET, an association of universities of the Czech Republic,
 offers a suite of libraries to develop systems with NETCONF and YANG.
-The Sysrepo \ci{cite} library, allows application developers to add YANG based configuration models to their
-applications, which can then be combined with the Netopeer2\ci{cite} project to automatically integrate NETCONF
-support. While not directly useful for writing a NETCONF client, their libyang \ci{cite} library offers
+The Sysrepo library, allows application developers to add YANG based configuration models to their
+applications, which can then be combined with the Netopeer2 project to automatically integrate NETCONF
+support. While not directly useful for writing a NETCONF client, their libyang library offers
 tooling for interpreting and validating YANG models. This library also offers functionality when
 working with instance data (e.g. a configuration snippet) in order to validate or manipulate this data.
 
@@ -213,11 +211,7 @@ over the world. All interconnects and peering to ISPs, customers and internet ex
   \label{fig:topology}
 \end{figure}
 
+This thesis is limited to the access layer, which encompasses the shown PoPs with their access switches in \ref{fig:topology}.
 
-\cn{Access layer}
-
-\cn{Current state: Not a lot of automation}
-
-\cn{If configuration from OSS - forces correct documentation -> documentation implies configuration}
 
 

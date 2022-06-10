@@ -2,3 +2,65 @@
 \null
 \vfil % or it might be \null
 \begin{center}\textbf{Abstract}\end{center}
+
+Managing the configuration of network devices is a complex topic and relevant
+to both small and large businesses. After identifying a lot of manual processes within Init7 AG,
+an effort to find better solutions was started. There are a lot of different protocols and
+software solutions attempting to solve this problem, but most of them are either
+limited in functionality or are solutions by hardware vendors which only support
+their own networking gear.
+As Init7 is an open-source minded company, uses multiple vendors for their hardware
+and needs such a solution, the idea started of creating a custom implementation
+of a network management system. The goal was to utilize open source tooling
+and create a system that focuses on being flexible and vendor-agnostic.
+Init7 already uses NetBox, an open source DCIM/IPAM, for inventory and documentation purposes.
+This sparked the idea to build a configuration management solution on top of NetBox.
+
+Following the initial idea, a collaboration between ZHAW and Init7 was formed to
+create a proof of concept within the scope of this thesis. Together with Init7
+the goals were outlined, and a software project plan was created.
+
+NETCONF/YANG was chosen as the method of configuration, as it provides a clean
+interface for integration and is also supported by many major vendors.
+Focus was also laid onto the security of the solution, as it needs to access
+critical network infrastructure.
+
+The resulting proof of concept, proved to be useful in real-world applications
+within Init7 business use-cases. Two complete services were implemented and were
+verified by the Init7 network engineering team. Since the project was a success,
+there is a high chance that Init7 will continue work on this project to make it
+ready for a production environment.
+
+\clearpage
+\null
+\vfil % or it might be \null
+\begin{center}\textbf{Zusammenfassung}\end{center}
+
+Die Verwaltung der Konfiguration von Netzwerkgeräten ist ein komplexes 
+Thema und relevant sowohl für kleine als auch für grosse Unternehmen. 
+Nach der Identifizierung vieler manueller Prozesse innerhalb der Init7 AG, 
+wurde ein Versuch gestartet, bessere Lösungen zu finden. Es gibt eine Vielzahl 
+von Protokollen und Softwarelösungen, die versuchen, dieses Problem zu lösen, 
+aber die meisten davon sind entweder aber die meisten von ihnen sind entweder 
+in ihrer Funktionalität eingeschränkt oder sind Lösungen von Hardwareherstellern, 
+die nur ihre eigenen Netzwerkgeräte unterstützen. ihre eigene Netzwerkausrüstung unterstützen.
+Da Init7 ein Open-Source-Unternehmen ist, das seine Hardware von mehreren Anbietern 
+bezieht und eine solche Lösung benötigt, entstand die Idee, eine eigene Implementierung 
+eines Netzwerkmanagementsystems zu entwickeln. Das Ziel war es, Open-Source-Tools zu verwenden 
+und ein System zu schaffen, das flexibel und herstellerunabhängig ist. Init7 verwendet bereits 
+NetBox, ein Open Source DCIM/IPAM, für Inventarisierungs- und Dokumentationszwecke. 
+Daraus entstand die Idee, eine Konfigurationsmanagementlösung auf der Grundlage von NetBox zu entwickeln.
+
+Nach der ersten Idee kam es zu einer Zusammenarbeit zwischen der ZHAW und Init7, 
+um im Rahmen dieser Arbeit einen Proof of Concept zu erstellen. 
+Gemeinsam mit Init7 wurden die Ziele umrissen und ein Software-Projektplan erstellt.
+
+Als Konfigurationsmethode wurde NETCONF/YANG gewählt, da es eine saubere Schnittstelle 
+für die Integration bietet und zudem von vielen grossen Anbietern unterstützt wird. 
+Ein weiterer Schwerpunkt lag auf der Sicherheit der Lösung, da sie auf kritische Netzwerkinfrastruktur
+zugreifen muss. kritische Netzwerkinfrastruktur zugreifen muss.
+
+Der daraus resultierende Konzeptnachweis erwies sich in realen Anwendungen als nützlich im Rahmen 
+von Init7-Geschäftsanwendungen. Zwei vollständige Dienste wurden implementiert und wurden vom 
+Init7-Netzwerktechnikteam verifiziert. Da das Projekt ein Erfolg war, besteht eine hohe Wahrscheinlichkeit, 
+dass Init7 die Arbeit an diesem Projekt fortsetzen wird, um es für eine Produktionsumgebung bereit zu machen.

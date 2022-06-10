@@ -257,18 +257,63 @@ to the following:
   \item Within NetBox:
   \begin{enumerate}
     \item Set the service field on the interface to Fiber7
-    \item 
+    \item If the customer requested a static IP address, set the DHCP reservation field to a free IP address
+    \item If the customer requested a prefix, set the prefix field to a free IP network prefix
+    \item If the customer does not specify a specific service action date, set the switchport to enabled
+    \item Deploy the configuration
   \end{enumerate}
+  \item The service notification ticket is now updated automatically within the BSS
 \end{enumerate}
 
-\cn{(above) list not complete}
 
-\cn{Describe process to extract template information}
+The main difference here, is that the engineer does not need to leave NetBox at all to perform the complete configuration.
+Interacting with fewer systems saves time and prevents potential mistakes, as fewer context switches happen and NetBox
+can enforce rules which prevents misconfiguration.
 
-\cn{Describe verification}
+In order to implement this, the engineer creates the context data using a GraphQL query.
+This is straightforward, as the engineer knows what information is necessary to perform
+the configuration.
+The more difficult step comes with the template authoring. As NETCONF/YANG was not
+utilized in the network engineering team before, they must learn
+how the configuration they want to achieve needs to look in order
+to produce a correct template.
+If the engineer already knows how the configuration needs to look
+like within the CLI, they can simply configure a test device with
+the desired configuration and use Cisco's YANG Suite to extract
+the NETCONF configuration. This works really well because of the way NETCONF functions; as
+NETCONF, when combined with YANG, is a model-driven configuration paradigm,
+the configuration that is retrieved with a \icode{<get-config>} RPC
+must be identical to the configuration that can be written
+to the device using \icode{<edit-config>}.
+
+The resulting template that was authored, can be found in the appendix \ref{code:nc-fiber7}.
+There are several noteworthy parts:
+
+\begin{itemize}
+  \item The line 5 filters the interfaces for those which have the Fiber7 service active
+  \item On line 7 a key benefit of NETCONF over CLI can be observed. The NETCONF attribute
+        \icode{operation="replace"} is used. This attributes, states that the specific configuration
+        node it is placed on, must have its configuration replaced completely by the child nodes.
+        The network device is responsible, that any configuration that does not match the
+        new configuration must be removed. In the case of Cisco's CLI, there is no equivalent
+        command to replace a specific subsection of configuration in this manner. Most often
+        any extraneous configuration must be explicitly removed in CLI statements, which is
+        not needed in the NETCONF case.
+\end{itemize}
+
+After that, the configuration was tested in Init7's lab, which provides a complete setup of a PoP.
+The improved process outlined above was tested by a network engineer, who subsequently confirmed
+that the correct configuration was applied, which renders the result of this scenario a success.
 
 \subsection{Business Optical Service}
 
+A more complex case is Init7's ``Business Optical Service'' product. This product is used
+to create a Layer 2 domain between multiple customer sites.
+
+The customer is provided with a managed router for each site. Both access switches at the according
+PoPs are then configured to create a MPLS tunnel to each other, where Layer 2 traffic from the customer
+is encapsulated at one PoP, sent over to the other PoP, and finally decapsulated and sent to the customers
+other site.
 
 \begin{figure}[h]
   \centering
@@ -277,18 +322,13 @@ to the following:
   \label{fig:s2s}
 \end{figure}
 
-\cn{
- - B2B customer (standard)
-  - Access Port with less configuration  \\
-  - VLAN 600  \\
-  - Static IP on router  \\
-  - Static Route on router  \\
- - B2B customer (new)  \\
-  - Trunk Port  \\
-  - Allowed VLAN 600  \\
-  - + same as standard?  \\
- - B2B Site-2-Site  \\
-  - VLL through MPLS  \\
+The process of provisioning a business optical service is not as straightforward as the fiber7 case,
+the complete process sadly can't be shared, but a redacted sample configuration is contained in the
+appendix \ref{code:nc-s2s}.
 
- - MikroTik ZTE  \\
- }
+This template demonstrates the flexibility and versatility of the core functionality of NetBox: inventory management
+and modeling the actual state of the infrastructure. Features such as tags and custom fields were used
+which are easily integrated into the GraphQL query.
+
+As before, the configuration was tested in a lab setup, equivalent to a real world case. A network engineer
+verified the deployed configuration and deemed it a success.

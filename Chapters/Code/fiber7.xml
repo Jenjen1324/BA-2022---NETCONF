@@ -1,0 +1,74 @@
+<nc:config xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+	<native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+		<interface>
+			{% for interface in device.device.interfaces %}
+				{% if "service-fiber7" in interface.tags | map(attribute="name") %}
+					{% set cisco_name = (interface.name | cisco_iface) %}
+					<{{ cisco_name.class }} nc:operation="replace">
+					<name>{{ cisco_name.number }}</name>
+					{% if interface.description %}
+						<description>{{ interface.description }}</description>
+                    {% endif %}
+					<switchport-config>
+						<switchport>
+							<access xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+								<vlan>
+									<vlan>700</vlan>
+								</vlan>
+							</access>
+							<mode xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+								<access/>
+							</mode>
+							<protected xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch"/>
+						</switchport>
+					</switchport-config>
+					<switchport>
+						<access xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+							<vlan>
+								<vlan>700</vlan>
+							</vlan>
+						</access>
+						<port-security xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+							<maximum>
+								<max-addresses>5</max-addresses>
+							</maximum>
+						</port-security>
+						<trunk xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+							<native>
+								<vlan-config>
+									<tag>true</tag>
+								</vlan-config>
+							</native>
+						</trunk>
+						<protected xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch"/>
+					</switchport>
+					<ip>
+						<dhcp>
+							<snooping xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-dhcp">
+								<vlan>
+									<id>700</id>
+									<information>
+										<option>
+											<format-type>
+												<circuit-id>
+													<string>{{ device.device.name }}_{{ cisco_name.number }}</string>
+												</circuit-id>
+											</format-type>
+										</option>
+									</information>
+								</vlan>
+							</snooping>
+						</dhcp>
+					</ip>
+					<device-tracking xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+						<attached-policies>
+							<attach-policy>DT_UNTRUSTED</attach-policy>
+						</attached-policies>
+						<attach-policy>DT_UNTRUSTED</attach-policy>
+					</device-tracking>
+					</TwentyFiveGigE>
+				{% endif %}
+			{% endfor %}
+		</interface>
+	</native>
+</nc:config>

@@ -1,0 +1,48 @@
+<nc:config xmlns:nc="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <native xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-native">
+        <interface>
+            {% for interface in device.device.interfaces %}
+                {% if "Service VLL" in interface.tags | map(attribute="name") %}
+                    {% set cisco_name = (interface.name | cisco_iface) %}
+                    <{{ cisco_name.class }} nc:operation="replace">
+                    <name>{{ cisco_name.number }}</name>
+                    {% if interface.description %}
+                        <description>{{ interface.description }}</description>
+                    {% endif %}
+                    <switchport-config>
+                        <switchport>
+                            <mode xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+                                <trunk/>
+                            </mode>
+                            <trunk xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-switch">
+                                <allowed>
+                                    <vlan>
+                                        <vlans>600,850</vlans>
+                                    </vlan>
+                                </allowed>
+                            </trunk>
+                        </switchport>
+                    </switchport-config>
+                    </{{ cisco_name.class }}>
+                {% endif %}
+                {% if interface.custom_fields.xconnect %}
+                    <Vlan nc:operation="merge">
+                        <name>{{ interface.untagged_vlan.vid }}</name>
+                        <logging>
+                            <event>
+                                <link-status/>
+                            </event>
+                        </logging>
+                        <mtu>9190</mtu>
+                        <xconnect xmlns="http://cisco.com/ns/yang/Cisco-IOS-XE-l2vpn">
+                            <address>{{ interface.custom_fields.xconnect.split(' ')[0] }}</address>
+                            <vcid>{{ interface.custom_fields.xconnect.split(' ')[1] }}</vcid>
+                            <encapsulation>mpls</encapsulation>
+                            <pw-class>VLL_ETH</pw-class>
+                        </xconnect>
+                    </Vlan>
+                {% endif %}
+            {% endfor %}
+        </interface>
+    </native>
+</nc:config>

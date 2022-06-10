@@ -1,3 +1,30 @@
 \chapter{\label{discussion}Discussion}
 \thispagestyle{fancy}
 
+\section{Achieved goals}
+
+To summarize, the goals of providing a flexible and vendor-agnostic configuration was reached
+partially. For a proof of concept work being able to model
+real world offerings which are high in complexity, and subsequently configure them correctly,
+proves that combining NetBox with NETCONF can create a powerful \acrshort{OSS}.
+
+While it was verified that quite a few other vendors support NETCONF as well, no concrete
+testing could be performed due to time and also equipment constraints.
+
+After working with together with the Init7 engineering staff and later also presenting
+the finished product, the consensus was to pursue this avenue further. As the project
+is open source, this may also bring future benefits to the general networking community.
+
+Some flaws were found in the security of the work, which have to be addressed before
+it is used in a production environment. While one could describe the finding as an
+oversight, a security audit may be necessary in order to ensure that no other
+oversights were missed, especially for such a sensitive system.
+
+\section{Problems during development}
+
+Major time blockers were inconsistencies especially with Cisco's IOS-XE software.
+Several bugs in their NETCONF implementation were identified, such as sections of configuration
+entirely missing from the YANG models, \icode{<get-config>} operations not returning the full data,
+and even \icode{<edit-config>} nodes which are documented in the YANG model but proved to be non-functional
+in practice. Several support tickets were opened with Cisco, without response yet.
+
