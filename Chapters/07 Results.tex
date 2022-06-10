@@ -133,14 +133,74 @@ with ``GraphiQL''.
 
 \subsection{Configuration Template Editor}
 
+Since the template the user writes should result in a valid NETCONF RPC
+message, which is constructed using XML syntax, a code editor like experience
+is preferred. Since NetBox is a browser based application, JavaScript based
+code editors were evaluated and the Ace editor was chosen based on its
+lightweightness and simplicity.
+
+The template editor is split into three panes, where the engineer can see
+the context data, the template content and a preview. This way, the engineer
+is always aware what context data he can use, and can quickly see what the result
+of a rendered template looks like.
+
 \subsection{Configuration Transport}
+
+Lastly, the configuration transport component ties all the other components
+together and enables the deployment of a configuration to a device.
+The actual deployment is implemented through the \icode{ncclient} library,
+which manages the NETCONF connection and supplies an interface to send
+RPCs through it.
+
+Additionally, the ``glue'' is implemented to facilitate the rendering of
+the template, retrieving the credentials and subsequently deploying the
+configuration.
+Special care needs to be taken when retrieving the credentials, as the
+configured authorization needs to be enforced to prevent users from
+deploying configuration when they are not allowed to do so.
+
 
 \section{\label{eval-security}Security Evaluation}
 
+To evaluate the security of the implemented solution, scenarios based on
+the threat actors defined in \ref{method:eval-sec} were drawn up and
+subsequently checked.
+
+
+\begin{enumerate}[label=S.\arabic*]
+  \item An {\it external actor} only with the knowledge
+  that the system exists, cannot gain any form of access to the system or infrastructure. \\
+  NetBox is behind a firewall which only allows access from within the company network.
+  Additionally, NetBox is protected with standard username and password authentication,
+  which has currently no known exploits for the latest version of Django (the web framework NetBox is based on).
+  The impact is therefore negligible.
+
+  \item An {\it external actor} gains non-elevated privileges to the server NetBox is running on. \\
+  In a standard NetBox deployment, the instance is running as a separate user or even within a container.
+  Low privilege access on Linux inspect memory of other processes, therefore the stored credentials
+  cannot be extracted. If the actor has access to the configuration files, he may be able to discover the credentials of the
+  database NetBox uses. In that case, the actor may be able to create a user within NetBox and gain administrative access
+  to the running instance. While the actor is now able to deploy configurations to devices using the existing credentials,
+  the credentials themselves cannot be extracted, as the secret, once stored, is never revealed to any user ever again.
+  The privilege escalation within NetBox can be prevented through proper access restrictions to both the database
+  and configuration data.
+  The impact is high, but with proper configuration it can be significantly reduced.
+
+  \item An {\it unauthorized employee} without any explicit privileges attempts to deploy a configuration to a device. \\
+  The employee is not able to trigger a deployment because of the authorization check at the credential access manager.
+  But, the employee is able to modify configuration templates, potentially tricking an authorized user to deploy it to a device.
+  This is something that was missed during development and must be fixed before usage in production.
+
+  \item An {\it unauthorized employee} with only usage access on specific credentials attempts to change the authentication information,
+  potentially causing a denial of service for the operation of the configuration management. \\
+  This is prevented through the authorization check in the credential access manager. The main risk is misconfiguration within the
+  credential access manager if too permissive privileges are set.
+
+\end{enumerate}
 
 \section{Scenario Evaluation}
 
-The following sections describe three chosen real-world scenarios within Init7.
+The following sections describe two chosen real-world scenarios within Init7.
 More specifically, they are services which can be ordered by customers and also
 require some manual work by network engineers in the current process.
 

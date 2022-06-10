@@ -21,3 +21,4 @@ Sysrepo
 libyang
 restrictable
 GraphiQL
+lightweightness
